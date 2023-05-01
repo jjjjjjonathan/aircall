@@ -15,7 +15,8 @@
     "classnames": "^2.3.2",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "react-icons": "^4.8.0"
+    "react-icons": "^4.8.0",
+    "regenerator-runtime": "^0.13.11"
   },
   "devDependencies": {
     "babel-core": "6.26.*",
