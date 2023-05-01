@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  entry: ['babel-polyfill', './src/index.js'],
   module: {
     rules: [
       {
@@ -14,7 +15,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.(js|jsx)$/,
