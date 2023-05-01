@@ -24,7 +24,6 @@ const App = () => {
   };
 
   const updateCall = (id, isArchived) => {
-    setLoaded(false);
     fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -35,7 +34,6 @@ const App = () => {
       }
     }).then((response) => {
       if (response.status === 200) {
-        console.log(`successfully updated ${id}`);
         setCallData((prev) => prev.map((prevCall) => prevCall.id === id ? {
           id: prevCall.id,
           created_at: prevCall.created_at,
@@ -45,6 +43,34 @@ const App = () => {
           via: prevCall.via,
           duration: prevCall.duration,
           is_archived: !prevCall.is_archived,
+          call_type: prevCall.call_type
+        } : prevCall));
+      }
+    });
+  };
+
+  const updateAllCalls = (newStatus) => {
+    const callsToUpdate = callData.filter((call) => call.is_archived !== newStatus);
+
+    Promise.all(callsToUpdate.map((call) => fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${call.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        is_archived: newStatus
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }))).then((response) => {
+      if (response.filter((res) => res.status === 200).length === callsToUpdate.length) {
+        setCallData((prev) => prev.map((prevCall) => prevCall.is_archived !== newStatus ? {
+          id: prevCall.id,
+          created_at: prevCall.created_at,
+          direction: prevCall.direction,
+          from: prevCall.from,
+          to: prevCall.to,
+          via: prevCall.via,
+          duration: prevCall.duration,
+          is_archived: newStatus,
           call_type: prevCall.call_type
         } : prevCall));
       }
@@ -74,6 +100,7 @@ const App = () => {
           handleCallClick={handleCallClick}
           tab={tab}
           loaded={loaded}
+          updateAllCalls={updateAllCalls}
         />
       )}
       {tab === ARCHIVE && (
@@ -82,6 +109,7 @@ const App = () => {
           handleCallClick={handleCallClick}
           tab={tab}
           loaded={loaded}
+          updateAllCalls={updateAllCalls}
         />
       )}
       {tab === UNIQUE_CALL && !!uniqueCallId && (

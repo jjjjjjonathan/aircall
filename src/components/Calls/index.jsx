@@ -7,7 +7,7 @@ import { MdOutlineVoicemail } from 'react-icons/md';
 import { INBOX, ARCHIVE, VOICEMAIL, MISSED, ANSWERED, INBOUND, OUTBOUND } from '../../utils/constants';
 import { format } from 'date-fns';
 
-const CallListItem = ({ direction, id, duration, from, to, via, call_type: callType, handleCallClick, created_at: createdAt }) => {
+const CallListItem = ({ direction, id, from, to, via, call_type: callType, handleCallClick, created_at: createdAt }) => {
 
   let iconColor = '';
   if (callType === MISSED) iconColor = '#792122';
@@ -38,7 +38,7 @@ const CallListItem = ({ direction, id, duration, from, to, via, call_type: callT
   );
 };
 
-const CallList = ({ data, tab, handleCallClick, loaded }) => {
+const CallList = ({ data, tab, handleCallClick, loaded, updateAllCalls }) => {
   return (
     <div className='container-view'>
       {tab === INBOX && <h1>Your recent AirCalls</h1>}
@@ -47,7 +47,11 @@ const CallList = ({ data, tab, handleCallClick, loaded }) => {
       {data.length === 0 && loaded && <p>You have no {tab === ARCHIVE && <span>archived </span>}AirCalls.</p>}
       {data.length > 0 && (
         <Fragment>
-          <div className="call-item-container" tabIndex={0}>
+          <div
+            className="call-item-container"
+            tabIndex={0}
+            onClick={() => updateAllCalls(tab === INBOX)}
+          >
             {tab === INBOX && <span className='main-call-number'>Archive all calls</span>}
             {tab === ARCHIVE && <span className='main-call-number'>Unarchive all calls</span>}
           </div>
