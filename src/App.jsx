@@ -24,68 +24,82 @@ const App = () => {
   };
 
   const updateCall = async (id, isArchived) => {
-    setLoaded(false);
-    const response = await fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        is_archived: !isArchived
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
+    try {
+      setLoaded(false);
+      const response = await fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          is_archived: !isArchived
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      });
+      if (response.status === 200) {
+        setCallData((prev) => prev.map((prevCall) => prevCall.id === id ? {
+          id: prevCall.id,
+          created_at: prevCall.created_at,
+          direction: prevCall.direction,
+          from: prevCall.from,
+          to: prevCall.to,
+          via: prevCall.via,
+          duration: prevCall.duration,
+          is_archived: !prevCall.is_archived,
+          call_type: prevCall.call_type
+        } : prevCall));
+        setLoaded(true);
       }
-    });
-    if (response.status === 200) {
-      setCallData((prev) => prev.map((prevCall) => prevCall.id === id ? {
-        id: prevCall.id,
-        created_at: prevCall.created_at,
-        direction: prevCall.direction,
-        from: prevCall.from,
-        to: prevCall.to,
-        via: prevCall.via,
-        duration: prevCall.duration,
-        is_archived: !prevCall.is_archived,
-        call_type: prevCall.call_type
-      } : prevCall));
-      setLoaded(true);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
   const updateAllCalls = async (newStatus) => {
-    setLoaded(false);
-    const callsToUpdate = callData.filter((call) => call.is_archived !== newStatus);
+    try {
+      setLoaded(false);
+      const callsToUpdate = callData.filter((call) => call.is_archived !== newStatus);
 
-    const response = await Promise.all(callsToUpdate.map((call) => fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${call.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        is_archived: newStatus
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
+      const response = await Promise.all(callsToUpdate.map((call) => fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${call.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          is_archived: newStatus
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })));
+
+      if (response.filter((res) => res.status === 200).length === callsToUpdate.length) {
+        setCallData((prev) => prev.map((prevCall) => prevCall.is_archived !== newStatus ? {
+          id: prevCall.id,
+          created_at: prevCall.created_at,
+          direction: prevCall.direction,
+          from: prevCall.from,
+          to: prevCall.to,
+          via: prevCall.via,
+          duration: prevCall.duration,
+          is_archived: newStatus,
+          call_type: prevCall.call_type
+        } : prevCall));
+        setLoaded(true);
       }
-    })));
 
-    if (response.filter((res) => res.status === 200).length === callsToUpdate.length) {
-      setCallData((prev) => prev.map((prevCall) => prevCall.is_archived !== newStatus ? {
-        id: prevCall.id,
-        created_at: prevCall.created_at,
-        direction: prevCall.direction,
-        from: prevCall.from,
-        to: prevCall.to,
-        via: prevCall.via,
-        duration: prevCall.duration,
-        is_archived: newStatus,
-        call_type: prevCall.call_type
-      } : prevCall));
+    } catch (error) {
+      console.error(error.message);
     }
-    setLoaded(true);
+
   };
 
   // Some calls in the server are missing data such as direction, to, from, via, and call_type. I've filtered those out as I should expect the server to return data with all fields present
   const fetchData = async () => {
-    const response = await fetch('https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities');
-    const data = await response.json();
-    setCallData(data.filter((call) => checkCallObject(call)));
-    setLoaded(true);
+    try {
+      const response = await fetch('https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities');
+      const data = await response.json();
+      setCallData(data.filter((call) => checkCallObject(call)));
+      setLoaded(true);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   useEffect(() => {
