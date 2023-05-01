@@ -30,7 +30,7 @@ ul {
   height: 100%;
 }
 
-nav ul li button {
+button {
   background: none;
   color: inherit;
   border: none;

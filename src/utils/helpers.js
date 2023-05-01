@@ -7,3 +7,7 @@ export const checkCallObject = (call) => {
     call.hasOwnProperty('call_type')
   );
 };
+
+export const findUniqueCallDetails = (callId, data) => {
+  return data.find((call) => call.id === callId);
+};

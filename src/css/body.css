@@ -77,3 +77,27 @@ body {
 .time-info p {
   margin: 0;
 }
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.call-detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.container-view button {
+  background-color: green;
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+}
