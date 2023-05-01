@@ -6,6 +6,7 @@ import {
 import { MdOutlineVoicemail } from 'react-icons/md';
 import { INBOX, ARCHIVE, VOICEMAIL, MISSED, ANSWERED, INBOUND, OUTBOUND } from '../../utils/constants';
 import { format } from 'date-fns';
+import Loading from '../Loading/index.jsx';
 
 const CallListItem = ({ direction, id, from, to, via, call_type: callType, handleCallClick, created_at: createdAt }) => {
 
@@ -43,9 +44,10 @@ const CallList = ({ data, tab, handleCallClick, loaded, updateAllCalls }) => {
     <div className='container-view'>
       {tab === INBOX && <h1>Your recent AirCalls</h1>}
       {tab === ARCHIVE && <h1>Your archived AirCalls</h1>}
-      {data.length === 0 && !loaded && <p>Loading your AirCalls...</p>}
+      {data.length === 0 && !loaded && <Loading message={"Loading your AirCalls..."} />}
       {data.length === 0 && loaded && <p>You have no {tab === ARCHIVE && <span>archived </span>}AirCalls.</p>}
-      {data.length > 0 && (
+      {data.length > 0 && !loaded && <Loading message={`Hang tight, we're ${tab === INBOX ? '' : 'un'}archiving all your calls right now!`} />}
+      {data.length > 0 && loaded && (
         <Fragment>
           <div
             className="call-item-container"

@@ -24,6 +24,7 @@ const App = () => {
   };
 
   const updateCall = (id, isArchived) => {
+    setLoaded(false);
     fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -46,10 +47,12 @@ const App = () => {
           call_type: prevCall.call_type
         } : prevCall));
       }
+      setLoaded(true);
     });
   };
 
   const updateAllCalls = (newStatus) => {
+    setLoaded(false);
     const callsToUpdate = callData.filter((call) => call.is_archived !== newStatus);
 
     Promise.all(callsToUpdate.map((call) => fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${call.id}`, {
@@ -74,6 +77,7 @@ const App = () => {
           call_type: prevCall.call_type
         } : prevCall));
       }
+      setLoaded(true);
     });
   };
 
@@ -117,10 +121,10 @@ const App = () => {
           id={uniqueCallId}
           data={callData}
           updateCall={updateCall}
+          loaded={loaded}
         />
       )}
     </div>
-
   );
 };
 
