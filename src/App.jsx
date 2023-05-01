@@ -23,19 +23,32 @@ const App = () => {
     setTab(UNIQUE_CALL);
   };
 
-  const updateCall = (call) => {
-    setCallData((prev) => prev.map((prevCall) => prevCall.id === call.id ? {
-      // object destructuring not working
-      id: prevCall.id,
-      created_at: prevCall.createdAt,
-      direction: prevCall.direction,
-      from: prevCall.from,
-      to: prevCall.to,
-      via: prevCall.via,
-      duration: prevCall.duration,
-      is_archived: !prevCall.is_archived,
-      call_type: prevCall.call_type
-    } : prevCall));
+  const updateCall = (id, isArchived) => {
+    setLoaded(false);
+    fetch(`https://charming-bat-singlet.cyclic.app/https://cerulean-marlin-wig.cyclic.app/activities/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        is_archived: !isArchived
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        console.log(`successfully updated ${id}`);
+        setCallData((prev) => prev.map((prevCall) => prevCall.id === id ? {
+          id: prevCall.id,
+          created_at: prevCall.created_at,
+          direction: prevCall.direction,
+          from: prevCall.from,
+          to: prevCall.to,
+          via: prevCall.via,
+          duration: prevCall.duration,
+          is_archived: !prevCall.is_archived,
+          call_type: prevCall.call_type
+        } : prevCall));
+      }
+    });
   };
 
   // Some calls in the server are missing data such as direction, to, from, via, and call_type. I've filtered those out as I should expect the server to return data with all fields present
@@ -72,7 +85,11 @@ const App = () => {
         />
       )}
       {tab === UNIQUE_CALL && !!uniqueCallId && (
-        <UniqueCall id={uniqueCallId} data={callData} />
+        <UniqueCall
+          id={uniqueCallId}
+          data={callData}
+          updateCall={updateCall}
+        />
       )}
     </div>
 
