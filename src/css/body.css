@@ -23,3 +23,57 @@ body {
 .container-view h1 {
   font-size: 1.75em;
 }
+
+.call-item-container {
+  width: 95%;
+  height: 60px;
+  border-color: rgb(203 213 225);
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 0.5rem;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0 10px;
+  align-items: center;
+}
+
+.call-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 50%;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.call-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  margin-left: 10px;
+}
+
+.call-info p {
+  margin: 0;
+}
+
+.main-call-number {
+  font-weight: 700;
+  font-size: 1.25em;
+}
+
+.time-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.time-info p {
+  margin: 0;
+}
